@@ -1,8 +1,5 @@
-# Update 1.1.5
-You can load custom files or urls for the name generator<br>
-rename reload_from_url to reload<br>
-add get_new_names()<br>
-add return_total_generated_names()
+# Update 1.1.6
+fix misspeling of return_total_generated_names
 # Usage
 from git_fantasy_names import *<br>
 ng=NameGenerator()<br>
@@ -13,7 +10,7 @@ or<br>
 from git_fantasy_names import *<br>
 ng=NameGenerator()<br>
 print(ng.MakeNames(ng.get_available_categories()[3],count=10,cleanoutput=True))
-print(ng.return_total_geneated_names())
+print(ng.return_total_generated_names())
 # Instalation
 pip install git-fantasy-names
 # Error explinations

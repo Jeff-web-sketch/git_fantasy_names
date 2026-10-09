@@ -65,10 +65,10 @@ class NameGenerator:
         '''Returns the most recently added names from the url'''
         return json.loads(requests.get(self.new_names).text)
     
-    def return_total_geneated_names(self):
+    def return_total_generated_names(self):
         '''Returns the number of names genereated in the current session'''
         return self.total_generated_names
-    
+        
     def sample(self):
         print("---Centaur names---")
         print(self.MakeNames("centaur", count=10, cleanoutput=True))
@@ -78,7 +78,7 @@ class NameGenerator:
         print(self.MakeNames("mermaid", count=10, cleanoutput=True))
         print("---Total Geneated---")
         print(ng.return_total_geneated_names())
-    
+
 if __name__ == "__main__":
     ng=NameGenerator()
     ng.sample()
