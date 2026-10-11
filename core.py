@@ -103,5 +103,4 @@ class NameGenerator:
 
 if __name__ == "__main__":
     ng=NameGenerator()
-    #ng.sample()
-    print(ng.MakeCharacter(20))
+
