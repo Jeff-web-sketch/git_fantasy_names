@@ -37,8 +37,8 @@ class NameGenerator:
     
     def reload_json(self):
         self._load_json()
-        
-    def MakeNames(self, category: str, count=5, cleanoutput=False):
+    
+    def MakeNames(self, category: str, count=5,length=1,cleanoutput=False):
         '''Generate names'''
         if category not in self.get_available_categories():
             print(colorama.Fore.RED+"Error 2: Name not available")
@@ -47,13 +47,24 @@ class NameGenerator:
         for json_category, json_obj in self.json_data.items():
             if json_category == category:
                 for i in range(count):
-                    self.output_list.append(self._pick(list(json_obj["starts"]))+self._pick(list(json_obj["ends"])))
-                    self.total_generated_names+=1
+                    output=(self._pick(list(json_obj["starts"])))
+                    for i in range(length):
+                        output+=(self._pick(list(json_obj["ends"])))
+                        while True:
+                            if output in self.output_list:
+                                output=(self._pick(list(json_obj["starts"])))
+                                for i in range(length):
+                                    output+=(self._pick(list(json_obj["ends"])))
+                            else:
+                                break
+                    else:
+                        self.output_list.append(output)
+                        self.total_generated_names+=1
                 if cleanoutput == True:
                     return ", ".join(self.output_list)
                 else:
                     return self.output_list
-            
+    
     def get_available_categories(self):
         '''Get all available categories'''
         self.all_categories=[]
@@ -63,22 +74,34 @@ class NameGenerator:
     
     def get_new_names(self):
         '''Returns the most recently added names from the url'''
-        return json.loads(requests.get(self.new_names).text)
+        new_names=json.loads(requests.get(self.new_names).text)
+        return [new_names,len(new_names)]
     
     def return_total_generated_names(self):
         '''Returns the number of names genereated in the current session'''
         return self.total_generated_names
         
-    def sample(self):
-        print("---Centaur names---")
-        print(self.MakeNames("centaur", count=10, cleanoutput=True))
-        print("---Artifact names---")
-        print(self.MakeNames("artifact", count=10, cleanoutput=True))
-        print("---Mermaid names---")
-        print(self.MakeNames("mermaid", count=10, cleanoutput=True))
-        print("---Total Geneated---")
-        print(ng.return_total_geneated_names())
+    def sample(self,old=False):
+        if old:
+            print("---Centaur names---")
+            print(self.MakeNames("centaur", count=10, cleanoutput=True))
+            print("---Artifact names---")
+            print(self.MakeNames("artifact", count=10, cleanoutput=True))
+            print("---Mermaid names---")
+            print(self.MakeNames("mermaid", count=10, cleanoutput=True))
+            print("---Total Geneated---")
+            print(ng.return_total_generated_names())
+        else:
+            character=self._pick(self.get_available_categories())
+            name=self.MakeNames(character)
+            print("Name:",name[randint(0,4)])
+            print("Age:",randint(1, 100))
+            print("Type:",character)
+            print("Strength:",randint(1,20))
+            print("Knowledge:",randint(1,20))
+        
 
 if __name__ == "__main__":
     ng=NameGenerator()
-    ng.sample()
+    #ng.sample()
+    print(ng.MakeCharacter(20))
