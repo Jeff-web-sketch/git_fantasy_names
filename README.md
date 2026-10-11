@@ -1,9 +1,12 @@
+<a href=https://github.com/Jeff-web-sketch/git_fantasy_names>github repo</a>
 # Update 1.2.0
 fix misspeling of return_total_generated_names()<br>
 add the length parameter to MakeNames(), you can now make names longer (some categories may not work well with this)<br>
 added a new sample. Use the old=True parameter for the old one<br>
 get_new_names() now retruns a list, the new names and the amount<br>
-add duplicate detection in MakeNames()
+add duplicate detection in MakeNames()<br>
+add show_url_or_path(), retruns the url you are using, or the file path<br>
+you can set a local path for new names
 # Usage
 from git_fantasy_names import *<br>
 ng=NameGenerator()<br>

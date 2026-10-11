@@ -2,19 +2,24 @@ import json
 import requests
 from random import randint
 import colorama
+import ast
 
 colorama.init(autoreset=True)
 
 class NameGenerator:
     '''Generate fantasy names'''
-    def __init__(self,local_path=None,url="https://raw.githubusercontent.com/jeff-web-sketch/git-fantasy-names-data/main/data.json"):
+    def __init__(self,local_path=None,local_new_names_path=None,url="https://raw.githubusercontent.com/jeff-web-sketch/git-fantasy-names-data/main/data.json"):
         self.total_generated_names=0
         self.output_list=[]
         self.all_categories=[]
         self.local_path=local_path
         self.url=url
         self._load_json()
-        self.new_names="https://raw.githubusercontent.com/jeff-web-sketch/git-fantasy-names-data/main/new_names.data"
+        self.local_new_names_path=local_new_names_path
+        if local_new_names_path == None:
+            self.new_names_url="https://raw.githubusercontent.com/jeff-web-sketch/git-fantasy-names-data/main/new_names.data"
+        else:
+            self.new_names_url=local_new_names_path
         
         
     def _pick(self, input_list: list):
@@ -22,7 +27,7 @@ class NameGenerator:
         return input_list[randint(0,len(input_list)-1)]
     
     def _load_json(self):
-        '''Load the names data from url'''
+        '''Load the names data from url or file'''
         if self.local_path != None:
             try:
                 self.json_data=json.loads(open(self.local_path,'r').read())
@@ -36,6 +41,7 @@ class NameGenerator:
         return self.json_data
     
     def reload_json(self):
+        '''Call the loading script'''
         self._load_json()
     
     def MakeNames(self, category: str, count=5,length=1,cleanoutput=False):
@@ -74,13 +80,23 @@ class NameGenerator:
     
     def get_new_names(self):
         '''Returns the most recently added names from the url'''
-        new_names=json.loads(requests.get(self.new_names).text)
+        if self.local_new_names_path == None:
+            new_names=requests.get(self.new_names_url).text
+        else:
+            new_names=ast.literal_eval(open(self.new_names_url).read())
         return [new_names,len(new_names)]
     
     def return_total_generated_names(self):
         '''Returns the number of names genereated in the current session'''
         return self.total_generated_names
-        
+    
+    def show_url_or_path(self):
+        if self.local_path==None:
+            return self.url
+        else:
+            return self.local_path
+    
+    
     def sample(self,old=False):
         if old:
             print("---Centaur names---")
@@ -103,4 +119,4 @@ class NameGenerator:
 
 if __name__ == "__main__":
     ng=NameGenerator()
-
+    ng.sample()
